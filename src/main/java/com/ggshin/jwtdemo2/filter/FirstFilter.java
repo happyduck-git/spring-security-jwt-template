@@ -10,7 +10,6 @@ public class FirstFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-
         /* Servlet Request를 상속:
             Http protocol의 request 정보를 Servlet에 전달하기 위한 목적으로 사용
             Header 정보, parameter, cookie, uri, url 등의 정보를 읽어들이는 메서드를 가진 클래스
@@ -34,10 +33,6 @@ public class FirstFilter implements Filter {
                 writer.println("인증 실패");
             }
         }
-
-
-
-
 
     }
 }

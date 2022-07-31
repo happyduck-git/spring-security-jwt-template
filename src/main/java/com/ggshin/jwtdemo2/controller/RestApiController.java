@@ -1,11 +1,20 @@
 package com.ggshin.jwtdemo2.controller;
 
+import com.ggshin.jwtdemo2.model.Member;
+import com.ggshin.jwtdemo2.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class RestApiController {
+
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/home")
     public String home() {
@@ -17,9 +26,11 @@ public class RestApiController {
         return "<h1>token</h1>";
     }
 
-    //'/token' 일 때와 동일하게 POST 요청이므로 같은 방식으로 동작함
-    @PostMapping("/token2")
-    public String token2() {
-        return "<h1>token2</h1>";
+    @PostMapping("/join")
+    public String join(@RequestBody Member member) {
+        member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
+        member.setRoles("ROLE_USER");
+        memberRepository.save(member);
+        return "회원가입 완료";
     }
 }
