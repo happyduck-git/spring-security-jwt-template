@@ -24,12 +24,12 @@ public class FirstFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
 
         res.setCharacterEncoding("UTF-8");
-        if(req.getMethod().equals("POST")) {
-            String headerAuth = req.getHeader("Authorization");
-            if(headerAuth.equals("codestates")) {
+        if(req.getMethod().equals("POST")) { //요청이 POST일 때
+            String headerAuth = req.getHeader("Authorization"); //Authorization 헤더의 value 확인
+            if(headerAuth.equals("codestates")) { //value가 codestates인 경우에 chain.doFilter() 수행
                 chain.doFilter(req, res);
 
-            } else {
+            } else { //value가 다른 값이면 "인증 실패" 메세지 보내기
                 PrintWriter writer = res.getWriter();
                 writer.println("인증 실패");
             }
