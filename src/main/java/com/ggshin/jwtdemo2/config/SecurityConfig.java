@@ -1,5 +1,6 @@
 package com.ggshin.jwtdemo2.config;
 
+import com.ggshin.jwtdemo2.filter.FirstFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,10 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -18,6 +20,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.addFilterBefore(new FirstFilter(), BasicAuthenticationFilter.class); //BasicAuthenticationFilter 전에 FirstFilter가 동작하도록 필터 추가!
         httpSecurity.csrf().disable();
         httpSecurity.headers().frameOptions().disable();
 
