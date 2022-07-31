@@ -1,6 +1,8 @@
 package com.ggshin.jwtdemo2.config;
 
 import com.ggshin.jwtdemo2.filter.JwtAuthenticationFilter;
+import com.ggshin.jwtdemo2.filter.JwtAuthorizationFilter;
+import com.ggshin.jwtdemo2.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
     private final CorsFilter corsFilter; //(4)CorsFilter 추가
+    private final MemberRepository memberRepository;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -60,7 +63,8 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
             builder
                     .addFilter(corsFilter)
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager));
+                    .addFilter(new JwtAuthenticationFilter(authenticationManager))
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager, memberRepository)); //권한 확인 필요한 요청시 동작될 필터 추가
         }
     }
 }
